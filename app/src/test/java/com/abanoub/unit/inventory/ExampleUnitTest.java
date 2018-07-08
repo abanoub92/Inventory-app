@@ -1,4 +1,4 @@
-package com.abanoub.unit.inventoryapp;
+package com.abanoub.unit.inventory;
 
 import org.junit.Test;
 

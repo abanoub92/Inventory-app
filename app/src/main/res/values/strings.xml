@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Inventory App</string>
+    <string name="app_name">Inventory</string>
+
+    <string name="splash">Inventory app</string>
+
+    <string name="action_menu_delete_all">Delete all products</string>
 </resources>

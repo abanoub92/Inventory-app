@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.abanoub.unit.inventoryapp">
+    package="com.abanoub.unit.inventory">
 
     <application
         android:allowBackup="true"
@@ -9,12 +9,31 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".UI.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".data.ProductProvider"
+            android:authorities="com.abanoub.unit.inventory"
+            android:exported="false" />
+
+        <activity
+            android:name=".UI.HomeActivity"
+            android:theme="@style/AppTheme2" />
+
+        <activity android:name=".UI.EditActivity"
+            android:theme="@style/AppTheme2"
+            android:parentActivityName=".UI.HomeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.HomeActivity"/>
+
         </activity>
     </application>
 

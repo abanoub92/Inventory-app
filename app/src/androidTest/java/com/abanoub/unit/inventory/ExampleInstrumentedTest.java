@@ -1,4 +1,4 @@
-package com.abanoub.unit.inventoryapp;
+package com.abanoub.unit.inventory;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
