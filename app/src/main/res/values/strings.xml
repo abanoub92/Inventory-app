@@ -4,4 +4,16 @@
     <string name="splash">Inventory app</string>
 
     <string name="action_menu_delete_all">Delete all products</string>
+    <string name="action_menu_edit">Edit product</string>
+
+    <string name="action_menu_add">Add product</string>
+    <string name="action_menu_attach">Attach image</string>
+    <string name="action_menu_delete">Delete product</string>
+
+    <string name="edit_name_hint">Product Name</string>
+    <string name="edit_quantity_hint">Product Quantity</string>
+    <string name="edit_price_hint">Product Price</string>
+    <string name="edit_supplier_hint">Product Supplier</string>
+    <string name="edit_image_description">Product Image</string>
+    <string name="edit_get_image_button">Pick product image</string>
 </resources>

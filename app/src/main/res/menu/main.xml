@@ -5,8 +5,14 @@
     tools:context=".UI.HomeActivity">
 
     <item
+        android:id="@+id/edit_product"
+        android:icon="@drawable/add"
+        android:title="@string/action_menu_edit"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/delete_all"
         android:title="@string/action_menu_delete_all"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>
