@@ -6,6 +6,8 @@
     <string name="action_menu_delete_all">Delete all products</string>
     <string name="action_menu_edit">Edit product</string>
 
+    <string name="empty_text">Store empty now</string>
+
     <string name="action_menu_add">Add product</string>
     <string name="action_menu_attach">Attach image</string>
     <string name="action_menu_delete">Delete product</string>
