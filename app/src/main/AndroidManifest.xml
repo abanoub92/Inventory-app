@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abanoub.unit.inventory">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,7 +31,8 @@
 
         <activity android:name=".UI.EditActivity"
             android:theme="@style/AppTheme2"
-            android:parentActivityName=".UI.HomeActivity">
+            android:parentActivityName=".UI.HomeActivity"
+            android:label="@string/action_menu_edit">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
