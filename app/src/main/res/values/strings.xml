@@ -18,4 +18,21 @@
     <string name="edit_supplier_hint">Product Supplier</string>
     <string name="edit_image_description">Product Image</string>
     <string name="edit_get_image_button">Pick product image</string>
+
+    <string name="dialog_delete_all_msg">Do you want to delete all data?</string>
+    <string name="dialog_delete_all_yes">Delete all</string>
+    <string name="dialog_delete_all_cancel">Cancel</string>
+
+    <string name="dialog_save_msg">You do some change on data, Do you want to save it?</string>
+    <string name="dialog_save_discard">Discard</string>
+    <string name="dialog_save_keep_editing">Keep Editing</string>
+
+    <string name="dialog_delete_msg">Do you want to delete this product?</string>
+    <string name="dialog_delete_yes">Delete</string>
+    <string name="dialog_delete_cancel">Cancel</string>
+
+    <string name="sales_activity_title">Product Sales</string>
+
+    <string name="blank_supplier">Blank Supplier</string>
+
 </resources>

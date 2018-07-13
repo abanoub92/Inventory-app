@@ -58,7 +58,7 @@ public class ProductProvider extends ContentProvider {
         SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor;
 
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match){
             case PRODUCT:
                 cursor = sqLiteDatabase.query(ProductEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
@@ -83,7 +83,15 @@ public class ProductProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case PRODUCT:
+                return ProductEntry.CONTENT_LIST_TYPE;
+            case PRODUCT_ID:
+                return ProductEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     /**
@@ -92,7 +100,7 @@ public class ProductProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match){
             case PRODUCT:
                 return insertProduct(uri, contentValues);
@@ -106,7 +114,7 @@ public class ProductProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match){
             case PRODUCT:
                 return deleteProduct(uri, selection, selectionArgs);
@@ -124,7 +132,7 @@ public class ProductProvider extends ContentProvider {
      */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match){
             case PRODUCT:
                 return updateProduct(uri, contentValues, s, strings);

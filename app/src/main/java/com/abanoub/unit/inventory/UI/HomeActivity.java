@@ -1,9 +1,11 @@
 package com.abanoub.unit.inventory.UI;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -29,8 +31,10 @@ import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    // image data contain image of product but in byte shape
     private byte[] imageData;
 
+    // cursor adapter which hold and contain the product data
     private CursorAdapter cursorAdapter;
 
     private static final int LOADER_INDEX = 0;
@@ -40,31 +44,52 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // create a reference to floating button xml and view class
         FloatingActionButton actionButton = findViewById(R.id.action_floating_button);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            }
-        });
-
-
-        GridView gridView = findViewById(R.id.product_list);
-        cursorAdapter = new ProductAdapter(this, null);
-        gridView.setAdapter(cursorAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
-                Intent intent = new Intent(HomeActivity.this, EditActivity.class);
-                Uri uri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
-                intent.setData(uri);
+                Intent intent = new Intent(HomeActivity.this, SalesActivity.class);
                 startActivity(intent);
+
+                // add some transitions when activity is starting
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
+        //make an initial loader to connect to product data
         getLoaderManager().initLoader(LOADER_INDEX, null, this);
 
+        // create grid view reference between view group xml and main activity class
+        GridView gridView = findViewById(R.id.product_list);
+
+        // cursor adapter it's contains the product data for display it in grid view
+        cursorAdapter = new ProductAdapter(this, null);
+
+        // add the adapter to grid view to display the data
+        gridView.setAdapter(cursorAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
+                // moving to edit product activity to modify a product
+                Intent intent = new Intent(HomeActivity.this, EditActivity.class);
+
+                // getting the uri for this product data which can modify it
+                Uri uri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
+
+                // add the uri data to intent to move the uri to edit product
+                intent.setData(uri);
+
+                // go to edit product activity and pause home activity
+                startActivity(intent);
+
+                // add some transitions when activity is starting
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        //create a reference between xml and java class to empty grid view
+        //this view well show if the grid view is empty
         View empty_list = findViewById(R.id.empty_view);
         gridView.setEmptyView(empty_list);
     }
@@ -79,15 +104,21 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.edit_product:
-                Intent intent = new Intent(HomeActivity.this, EditActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                moveToEditProduct();
                 return true;
             case R.id.delete_all:
-                deleteAll();
+                showDeleteAllDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /** move to add product activity to to add new data */
+    private void moveToEditProduct() {
+        Intent intent = new Intent(HomeActivity.this, EditActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -108,11 +139,13 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         cursorAdapter.swapCursor(null);
     }
 
-
+    /** delete and clear all products data */
     private void deleteAll(){
         getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
     }
 
+
+    /** insert dummy data to test the data */
     private void insert(){
         ContentValues values = new ContentValues();
 
@@ -129,7 +162,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         getContentResolver().insert(ProductEntry.CONTENT_URI, values);
     }
 
-    // Bitmap to byte[] to imageData
+
+    /** Convert Bitmap to byte[] to imageData */
     public void setImageDataFromBitmap(Bitmap image) {
         if (image != null) {
             //bitmap to byte[]
@@ -140,7 +174,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
-    // Bitmap to byte[]
+    /** Convert Bitmap to byte[] array */
     public byte[] bitmapToByte(Bitmap bitmap) {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -154,5 +188,31 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    /** when user click delete all the dialog well appear to user
+      * to warn him whether delete all or cancel */
+    private void showDeleteAllDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_delete_all_msg);
+        builder.setPositiveButton(R.string.dialog_delete_all_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteAll();
+            }
+        });
+
+        builder.setNegativeButton(R.string.dialog_delete_all_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

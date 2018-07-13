@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abanoub.unit.inventory">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,16 +28,22 @@
         <activity
             android:name=".UI.HomeActivity"
             android:theme="@style/AppTheme2" />
-
-        <activity android:name=".UI.EditActivity"
-            android:theme="@style/AppTheme2"
+        <activity
+            android:name=".UI.EditActivity"
+            android:label="@string/action_menu_edit"
             android:parentActivityName=".UI.HomeActivity"
-            android:label="@string/action_menu_edit">
-
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.HomeActivity" />
+        </activity>
+        <activity android:name=".UI.SalesActivity"
+            android:label="@string/sales_activity_title"
+            android:parentActivityName=".UI.HomeActivity"
+            android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".UI.HomeActivity"/>
-
         </activity>
     </application>
 
