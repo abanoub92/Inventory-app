@@ -46,4 +46,6 @@
 
     <string name="default_quantity_value">0</string>
 
+    <string name="dialog_delete_sales_msg">Do you want to delete Sale bill?</string>
+
 </resources>

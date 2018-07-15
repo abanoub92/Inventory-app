@@ -1,8 +1,10 @@
 package com.abanoub.unit.inventory.UI;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -23,6 +25,7 @@ public class SalesActivity extends AppCompatActivity implements LoaderManager.Lo
 
     private static final int LOADER_INDEX = 0;
 
+    /** adapter contain the data for sales list */
     private CursorAdapter adapter;
 
     @Override
@@ -30,12 +33,18 @@ public class SalesActivity extends AppCompatActivity implements LoaderManager.Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales);
 
+        // create a reference with xml listView
         ListView salesList = findViewById(R.id.sales_list);
+
+        // create an object from custom cursor adapter
         adapter = new SalesAdapter(this, null);
+
+        // setting the adapter to sales list
         salesList.setAdapter(adapter);
 
         getLoaderManager().initLoader(LOADER_INDEX, null, this);
 
+        // adding the view well display in case of sales list is empty
         View view = findViewById(R.id.empty_view);
         salesList.setEmptyView(view);
     }
@@ -50,15 +59,17 @@ public class SalesActivity extends AppCompatActivity implements LoaderManager.Lo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.edit_product:
+                // move to make new sales operation activity
                 Intent intent = new Intent(SalesActivity.this, SaleProductActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left );
                 return true;
             case R.id.delete_all:
-                insert();
-
+                // alert dialog if the user want to delete all data
+                showDeleteDialog();
                 return true;
             case R.id.homeAsUp:
+                // back to the home activity for this activity
                 NavUtils.navigateUpFromSameTask(this);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
@@ -95,5 +106,33 @@ public class SalesActivity extends AppCompatActivity implements LoaderManager.Lo
         values.put(ProductEntry.COLUMN_SALES_CUSTOMER, "mr.max");
 
         getContentResolver().insert(ProductEntry.CONTENT_SALES_URI, values);
+    }
+
+    /* check the user rally want to delete all data */
+    private void showDeleteDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_delete_sales_msg);
+        builder.setPositiveButton(R.string.dialog_delete_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteSale();
+            }
+        });
+
+        builder.setNegativeButton(R.string.dialog_delete_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteSale(){
+        getContentResolver().delete(ProductEntry.CONTENT_SALES_URI, null, null);
     }
 }
