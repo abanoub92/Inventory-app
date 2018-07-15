@@ -31,8 +31,19 @@
     <string name="dialog_delete_yes">Delete</string>
     <string name="dialog_delete_cancel">Cancel</string>
 
-    <string name="sales_activity_title">Product Sales</string>
+    <string name="sales_activity_title">Products Sales</string>
 
     <string name="blank_supplier">Blank Supplier</string>
+
+    <string name="add">+</string>
+    <string name="back">-</string>
+
+    <string name="action_sales_menu_sale_product">Sale Product</string>
+
+    <string name="empty_sales_list">No Sales available</string>
+
+    <string name="customer_name">Customer name</string>
+
+    <string name="default_quantity_value">0</string>
 
 </resources>

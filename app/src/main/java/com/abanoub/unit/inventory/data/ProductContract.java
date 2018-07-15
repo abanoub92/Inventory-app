@@ -50,6 +50,7 @@ public final class ProductContract {
         public static final String COLUMN_SALES_PRODUCT_NAME = "name";
         public static final String COLUMN_SALES_QUANTITY = "quantity";
         public static final String COLUMN_SALES_PRICE = "price";
+        public static final String COLUMN_SALES_CUSTOMER = "customer";
 
     }
 }

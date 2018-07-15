@@ -37,13 +37,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".UI.HomeActivity" />
         </activity>
-        <activity android:name=".UI.SalesActivity"
+        <activity
+            android:name=".UI.SalesActivity"
             android:label="@string/sales_activity_title"
             android:parentActivityName=".UI.HomeActivity"
             android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UI.HomeActivity"/>
+                android:value=".UI.HomeActivity" />
+        </activity>
+        <activity android:name=".UI.SaleProductActivity"
+            android:label="@string/action_sales_menu_sale_product"
+            android:parentActivityName=".UI.SalesActivity"
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.SalesActivity"/>
         </activity>
     </application>
 
