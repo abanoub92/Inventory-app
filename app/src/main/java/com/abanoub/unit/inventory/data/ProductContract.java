@@ -30,19 +30,18 @@ public final class ProductContract {
 
 
         /**
-         * The MIME type of the {@link #CONTENT_URI} for a list of pets.
+         * The MIME type of the {@link #CONTENT_URI} for a list of products.
          */
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCT;
 
         /**
-         * The MIME type of the {@link #CONTENT_URI} for a single pet.
+         * The MIME type of the {@link #CONTENT_URI} for a single product.
          */
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCT;
 
 
-        public static final Uri CONTENT_SALES_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SALES);
 
 
         public static final String SALES_TABLE_NAME = "sales";
@@ -51,6 +50,22 @@ public final class ProductContract {
         public static final String COLUMN_SALES_QUANTITY = "quantity";
         public static final String COLUMN_SALES_PRICE = "price";
         public static final String COLUMN_SALES_CUSTOMER = "customer";
+
+
+        public static final Uri CONTENT_SALES_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SALES);
+
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a list of sales.
+         */
+        public static final String CONTENT_SALES_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SALES;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single sale operation.
+         */
+        public static final String CONTENT_SALES_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SALES;
 
     }
 }

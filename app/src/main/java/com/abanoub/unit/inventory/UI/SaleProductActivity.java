@@ -3,6 +3,7 @@ package com.abanoub.unit.inventory.UI;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,6 +28,10 @@ import java.util.ArrayList;
 
 public class SaleProductActivity extends AppCompatActivity {
 
+    private Spinner spinner;
+
+    private EditText cutomer;
+
     private TextView quantityText;
     private TextView priceText;
     private TextView quantityTotalText;
@@ -36,6 +42,9 @@ public class SaleProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale_product);
+
+        spinner = findViewById(R.id.customer_product);
+        cutomer = findViewById(R.id.customer_name);
 
         quantityText = findViewById(R.id.customer_quantity);
         priceText = findViewById(R.id.customer_price);
@@ -102,7 +111,7 @@ public class SaleProductActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sale_product:
-
+                saveSaleOpe();
                 return true;
             case R.id.homeAsUp:
                 NavUtils.navigateUpFromSameTask(this);
@@ -127,7 +136,6 @@ public class SaleProductActivity extends AppCompatActivity {
             list.add(name);
         }
 
-        Spinner spinner = findViewById(R.id.customer_product);
         ArrayAdapter arrayList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         arrayList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayList);
@@ -161,5 +169,53 @@ public class SaleProductActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    private void saveSaleOpe(){
+        ContentValues values = new ContentValues();
+
+        String productName = (String) spinner.getSelectedItem();
+        String quantity = quantityTotalText.getText().toString();
+        String price = priceTotalText.getText().toString();
+        String customerName = cutomer.getText().toString();
+
+        int quantityInt = Integer.parseInt(quantity);
+        double priceDouble = Double.parseDouble(price);
+
+        values.put(ProductEntry.COLUMN_SALES_PRODUCT_NAME, productName);
+        values.put(ProductEntry.COLUMN_SALES_QUANTITY, quantityInt);
+        values.put(ProductEntry.COLUMN_SALES_PRICE, priceDouble);
+        values.put(ProductEntry.COLUMN_SALES_CUSTOMER, customerName);
+
+        getContentResolver().insert(ProductEntry.CONTENT_SALES_URI, values);
+        updateProduct();
+
+        finish();
+    }
+
+
+    private void updateProduct(){
+        ContentValues values = new ContentValues();
+
+        String quantity = quantityTotalText.getText().toString();
+        int quantityInt = Integer.parseInt(quantity);
+        int totalQnt = Integer.parseInt(quantityText.getText().toString());
+
+        int total = totalQnt - quantityInt;
+
+        String selection = ProductEntry.COLUMN_PRODUCT_NAME + " =?";
+        String[] selectionArgs = {String.valueOf(spinner.getSelectedItem())};
+
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, total);
+
+        getContentResolver().update(ProductEntry.CONTENT_URI, values, selection, selectionArgs);
+    }
+
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

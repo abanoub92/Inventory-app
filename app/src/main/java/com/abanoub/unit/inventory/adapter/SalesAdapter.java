@@ -41,9 +41,9 @@ public class SalesAdapter extends CursorAdapter {
         textProductName.setText(product_name);
 
         TextView textQuantity = view.findViewById(R.id.sales_quantity);
-        textQuantity.setText(quantity);
+        textQuantity.setText(String.valueOf(quantity));
 
         TextView textPrice = view.findViewById(R.id.sales_price);
-        textPrice.setText((int) price);
+        textPrice.setText(String.valueOf(price));
     }
 }

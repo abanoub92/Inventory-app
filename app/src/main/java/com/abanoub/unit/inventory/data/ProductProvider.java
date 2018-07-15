@@ -25,6 +25,12 @@ public class ProductProvider extends ContentProvider {
     /** URI matcher code for the content URI for a single product in the products table */
     private static final int PRODUCT_ID = 11;
 
+    /** URI matcher code for the content URI for the sales table */
+    private static final int SALES = 20;
+
+    /** URI matcher code for the content URI for a single sale operation in the sales table */
+    private static final int SALES_ID = 21;
+
     /**
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -37,6 +43,10 @@ public class ProductProvider extends ContentProvider {
         uriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCT, PRODUCT);
 
         uriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCT + "/#", PRODUCT_ID);
+
+        uriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_SALES, SALES);
+
+        uriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_SALES + "/#", SALES_ID);
     }
 
 
@@ -63,12 +73,25 @@ public class ProductProvider extends ContentProvider {
             case PRODUCT:
                 cursor = sqLiteDatabase.query(ProductEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 break;
+
             case PRODUCT_ID:
                 selection = ProductEntry.COLUMN_PRODUCT_ID + " =?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = sqLiteDatabase.query(ProductEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 break;
+
+            case SALES:
+                cursor = sqLiteDatabase.query(ProductEntry.SALES_TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                break;
+
+            case SALES_ID:
+                selection = ProductEntry.COLUMN_PRODUCT_ID + " =?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                cursor = sqLiteDatabase.query(ProductEntry.SALES_TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                break;
+
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -89,6 +112,10 @@ public class ProductProvider extends ContentProvider {
                 return ProductEntry.CONTENT_LIST_TYPE;
             case PRODUCT_ID:
                 return ProductEntry.CONTENT_ITEM_TYPE;
+            case SALES:
+                return ProductEntry.CONTENT_SALES_LIST_TYPE;
+            case SALES_ID:
+                return ProductEntry.CONTENT_SALES_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
@@ -104,6 +131,10 @@ public class ProductProvider extends ContentProvider {
         switch (match){
             case PRODUCT:
                 return insertProduct(uri, contentValues);
+
+            case SALES:
+                return insertProduct(uri, contentValues);
+
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -118,10 +149,20 @@ public class ProductProvider extends ContentProvider {
         switch (match){
             case PRODUCT:
                 return deleteProduct(uri, selection, selectionArgs);
+
             case PRODUCT_ID:
                 selection = ProductEntry.COLUMN_PRODUCT_ID + " =?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return deleteProduct(uri, selection, selectionArgs);
+
+            case SALES:
+                return deleteProduct(uri, selection, selectionArgs);
+
+            case SALES_ID:
+                selection = ProductEntry.COLUMN_SALES_ID + " =?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return deleteProduct(uri, selection, selectionArgs);
+
             default:
                 throw new IllegalArgumentException("deleting is not supported for " + uri);
         }
@@ -136,10 +177,20 @@ public class ProductProvider extends ContentProvider {
         switch (match){
             case PRODUCT:
                 return updateProduct(uri, contentValues, s, strings);
+
             case PRODUCT_ID:
                 s = ProductEntry.COLUMN_PRODUCT_ID + " =?";
                 strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateProduct(uri, contentValues, s, strings);
+
+            case SALES:
+                return updateProduct(uri, contentValues, s, strings);
+
+            case SALES_ID:
+                s = ProductEntry.COLUMN_SALES_ID + " =?";
+                strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateProduct(uri, contentValues, s, strings);
+
             default:
                 throw new IllegalArgumentException("updating is not supported for " + uri);
         }
@@ -148,7 +199,12 @@ public class ProductProvider extends ContentProvider {
 
     private Uri insertProduct(Uri uri, ContentValues values){
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        long id = database.insert(ProductEntry.TABLE_NAME, null, values);
+        long id = 0;
+        if (uri == ProductEntry.CONTENT_URI) {
+            id = database.insert(ProductEntry.TABLE_NAME, null, values);
+        }else if (uri == ProductEntry.CONTENT_SALES_URI){
+            id = database.insert(ProductEntry.SALES_TABLE_NAME, null, values);
+        }
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
@@ -156,7 +212,12 @@ public class ProductProvider extends ContentProvider {
 
     private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs){
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        int value = database.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
+        int value = 0;
+        if (uri == ProductEntry.CONTENT_URI) {
+            value = database.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
+        }else if (uri == ProductEntry.CONTENT_SALES_URI){
+            value = database.update(ProductEntry.SALES_TABLE_NAME, values, selection, selectionArgs);
+        }
         getContext().getContentResolver().notifyChange(uri, null);
         return value;
     }
@@ -164,7 +225,12 @@ public class ProductProvider extends ContentProvider {
 
     private int deleteProduct(Uri uri, String selection, String[] selectionArgs){
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        int value = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+        int value = 0;
+        if (uri == ProductEntry.CONTENT_URI) {
+            value = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+        }else if (uri == ProductEntry.CONTENT_SALES_URI){
+            value = database.delete(ProductEntry.SALES_TABLE_NAME, selection, selectionArgs);
+        }
         getContext().getContentResolver().notifyChange(uri, null);
         return value;
     }
